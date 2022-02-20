@@ -11,24 +11,21 @@
 
 using namespace std;
 
-//그리디 알고리즘
 int main(void) {
     cin.tie(NULL);
     ios_base::sync_with_stdio(false);
     int N;   
-    int ans = 0;
-    bool flag = false;
+    int dp[5000];
+    fill_n(dp, 5000, 9999);
     cin >> N;
-    while (N >= 0) {
-        //제일 큰 수로 나누는게 best
-        if (N % 5 == 0) {
-            ans += N / 5;
-            cout << ans;
-            return 0;
-        }
-        N -= 3;
-        ans++;
+    dp[3] = 1;
+    dp[5] = 1;
+    for (int i = 6; i <= N; i++) {
+        dp[i] = min(dp[i - 3] + 1, dp[i - 5] + 1);
     }
-    cout << -1;
+    if (dp[N] >=9999)
+        cout << -1;
+    else
+        cout << dp[N];
     return 0;
 }
