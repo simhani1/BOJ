@@ -24,7 +24,7 @@ void dfs(int now, int goal, int cnt) {
         int next = adj[now][i];
         if (!visited[next]) {
             //cnt++을 안하는 이유: cnt를 직접적으로 건드리면 실제 정답보다 큰 수가 나올 수 있음
-            //일단 방문 할대마다 cnt를 증가시키다 보면 문제가 발생할 수 있음
+            //일단 방문 할때마다 cnt를 증가시키므로 문제가 발생할 수 있음
             dfs(next, goal, cnt + 1);
         }
     }
