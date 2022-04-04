@@ -1,0 +1,74 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+#include <vector>
+#include <cmath>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <time.h>
+#include <map>
+
+using namespace std;
+
+int N, M;
+int U, V, W;
+int K, C;
+int arr[201][201];
+vector <int> friendHome;
+vector <pair<int, int>> ans;
+const int INF = 999999999;
+
+void floyd(void) {
+    for (int k = 1; k <= N; k++) {
+        for (int i = 1; i <= N; i++) {
+            for (int j = 1; j <= N; j++) {
+                arr[i][j] = min(arr[i][j], arr[i][k] + arr[k][j]);
+            }
+        }
+    }
+}
+
+void findMinDist(void) {
+    for (int i = 1; i <= N; i++) {
+        int sum = 0;
+        for (int j = 0; j < friendHome.size(); j++) {
+            sum = max(sum, (arr[friendHome[j]][i] + arr[i][friendHome[j]]));
+        }
+        ans.push_back({ sum, i });
+    }
+}
+
+int main(void) {
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+    //모든 간선의 가중치는 1
+    cin >> N >> M;
+    for (int i = 1; i <= N; i++) {
+        for (int j = 1; j <= N; j++) {
+            if (i != j)
+                arr[i][j] = INF;
+        }
+    }
+    for (int i = 0; i < M; i++) {
+        cin >> U >> V >> W;
+        arr[U][V] = W;
+    }
+    cin >> K;
+    for (int i = 0; i < K; i++) {
+        cin >> C;
+        friendHome.push_back(C);
+    }
+    floyd();
+    findMinDist();
+    sort(ans.begin(), ans.end());
+    int minDist = ans[0].first;
+    for (int i = 0; i < ans.size(); i++) {
+        if (minDist == ans[i].first) {
+            cout << ans[i].second << " ";
+        }
+    }
+    return 0;
+}
