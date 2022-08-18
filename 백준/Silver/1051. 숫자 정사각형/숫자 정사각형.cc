@@ -40,7 +40,7 @@ int main(void)
                 // 배열의 범위를 벗어나지 않는 경우 탐색
                 if ((i + k) < N && (j + k) < M)
                 {
-                    // 4개의 꼭짓점이 모두 같은 경우 한 변의 최대 길이를 저장
+                    // 4개의 꼭짓점이 모두 같은 경우 최대 넓이를 저장
                     if (arr[i][j] == arr[i + k][j] && arr[i][j] == arr[i][j + k] && arr[i][j] == arr[i + k][j + k])
                         ans = max(ans, (k + 1) * (k + 1));
                 }
