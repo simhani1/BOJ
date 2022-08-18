@@ -34,7 +34,6 @@ int main(void)
     {
         for (int j = 0; j < M; j++)
         {
-            int maxLength = 0;
             // 1 ~ L-1 까지 주위를 탐색
             for (int k = 0; k < L; k++)
             {
@@ -43,12 +42,11 @@ int main(void)
                 {
                     // 4개의 꼭짓점이 모두 같은 경우 한 변의 최대 길이를 저장
                     if (arr[i][j] == arr[i + k][j] && arr[i][j] == arr[i][j + k] && arr[i][j] == arr[i + k][j + k])
-                        maxLength = k + 1;
+                        ans = max(ans, (k + 1) * (k + 1));
                 }
             }
-            ans = max(ans, maxLength);
         }
     }
-    cout << ans * ans;
+    cout << ans;
     return 0;
 }
