@@ -21,7 +21,7 @@ set<int> s1, s2;
 void solve(void)
 {
     int l = 0, r = 0, ans = MAX;
-    while (r <= N && l <= N)
+    while (r <= N)
     {
         if (s1.size() >= s2.size())
         {
