@@ -45,10 +45,8 @@ bool check(int x, int y, int type)
         if ((kingX == x && kingY == y + 1) || (kingX == x - 1 && kingY == y + 2))
             return false;
     if (type == 7)
-    {
         if ((kingX == x && kingY == y + 1) || (kingX == x + 1 && kingY == y + 2))
             return false;
-    }
     return true;
 }
 
