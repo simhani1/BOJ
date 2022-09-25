@@ -1,31 +1,37 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
-#include <cstdio>
-#include <vector>
+#include <string>
+#include <memory.h>
 #include <algorithm>
+#include <vector>
+#include <cmath>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <time.h>
+#include <map>
+#include <set>
 using namespace std;
-#define MAXV 100010
 
-int V, E, counter = 0, discovered[MAXV];
-bool isCutVertex[MAXV];
-vector<int> graph[MAXV];
+int V, E, seq = 0;
+int discovered[100001]; // DFS 탐색 순서 저장
+vector<int> adj[100001];
 vector<pair<int, int>> edge;
 
 int dfs(int A, int parent)
 {
-    discovered[A] = ++counter;
-    int ret = discovered[A];
-    for (int i = 0; i < (int)graph[A].size(); i++)
+    discovered[A] = ++seq;
+    int ret = discovered[A]; // 인접 노드 중 방문시간이 제일 빠른 노드를 저장
+    for (int i = 0; i < adj[A].size(); i++)
     {
-        int next = graph[A][i];
+        int next = adj[A][i];
         if (next == parent)
-
             continue;
-
         if (!discovered[next])
         {
             int low = dfs(next, A);
             if (low > discovered[A])
-                edge.push_back(make_pair(min(A, next), max(A, next)));
+                edge.push_back({min(A, next), max(A, next)});
             ret = min(ret, low);
         }
         else
@@ -34,20 +40,24 @@ int dfs(int A, int parent)
     return ret;
 }
 
-int main()
+int main(void)
 {
-    scanf("%d%d", &V, &E);
-    for (int i = 1; i <= E; i++)
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+    cin >> V >> E;
+    for (int i = 0, A, B; i < E; i++)
     {
-        int a, b;
-        scanf("%d%d", &a, &b);
-        graph[a].push_back(b);
-        graph[b].push_back(a);
+        cin >> A >> B;
+        adj[A].push_back(B);
+        adj[B].push_back(A);
     }
     dfs(1, 0);
     sort(edge.begin(), edge.end());
-    printf("%d\n", (int)edge.size());
-    for (int i = 0; i < (int)edge.size(); i++)
-        printf("%d %d\n", edge[i].first, edge[i].second);
+    cout << edge.size() << "\n";
+    for (int i = 0; i < edge.size(); i++)
+    {
+        cout << edge[i].first << " " << edge[i].second << "\n";
+    }
     return 0;
 }
