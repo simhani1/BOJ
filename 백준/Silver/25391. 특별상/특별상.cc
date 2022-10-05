@@ -15,8 +15,8 @@ using namespace std;
 
 int N, M, K;
 long long sum = 0;
-priority_queue<pair<int,int>> pqA;
-priority_queue<pair<int,int>> pqB;
+priority_queue<pair<int, int>> pqA;
+priority_queue<pair<int, int>> pqB;
 bool visited[1000000001];
 
 int main(void)
@@ -25,26 +25,31 @@ int main(void)
     cin.tie(0);
     cout.tie(0);
     cin >> N >> M >> K;
-    for(int i=0,A,B;i<N;i++){
-        cin>>A>>B;
-        pqA.push({A,B});
-        pqB.push({B,A});
+    for (int i = 0, A, B; i < N; i++)
+    {
+        cin >> A >> B;
+        pqA.push({A, B});
+        pqB.push({B, A});
     }
-    for(int i=0;i<K;i++){
-        sum+=pqB.top().second;
-        visited[pqB.top().second]=true;
+    for (int i = 0; i < K; i++)
+    {
+        sum += pqB.top().second;
+        visited[pqB.top().second] = true;
         pqB.pop();
     }
-    for(int i=0;i<M;i++){
-        if(!visited[pqA.top().first]){
-            sum+=pqA.top().first;
+    for (int i = 0; i < M; i++)
+    {
+        if (!visited[pqA.top().first])
+        {
+            sum += pqA.top().first;
             pqA.pop();
         }
-        else{
+        else
+        {
             pqA.pop();
             i--;
         }
     }
-    cout<<sum;
+    cout << sum;
     return 0;
 }
