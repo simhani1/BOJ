@@ -17,7 +17,8 @@ int N, M, K;
 long long sum = 0;
 priority_queue<pair<int, int>> pqA;
 priority_queue<pair<int, int>> pqB;
-bool visited[1000000001];
+// bool visited[1000000001];
+set<int> s;
 
 int main(void)
 {
@@ -34,22 +35,22 @@ int main(void)
     for (int i = 0; i < K; i++)
     {
         sum += pqB.top().second;
-        visited[pqB.top().second] = true;
+        s.insert(pqB.top().second);
         pqB.pop();
     }
     for (int i = 0; i < M; i++)
     {
-        if (!visited[pqA.top().first])
-        {
-            sum += pqA.top().first;
-            pqA.pop();
-        }
-        else
+        if (s.find(pqA.top().first) != s.end())
         {
             pqA.pop();
             i--;
         }
+        else
+        {
+            sum += pqA.top().first;
+            pqA.pop();
+        }
     }
-    cout << sum;
+    cout << sum << endl;
     return 0;
 }
