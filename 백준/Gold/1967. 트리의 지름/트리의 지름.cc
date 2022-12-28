@@ -10,34 +10,29 @@
 #include <deque>
 #include <time.h>
 #include <map>
-
+#include <set>
 using namespace std;
+#define MAX 123456789
+typedef long long ll;
 
-int N, P, C, W;
-vector<pair<int, int> > tree[10001];
+int N, start, maxCost = 0;
+vector<pair<int, int>> edge[10001];
 bool visited[10001];
-int keyNode;
-int maxDist = 0;
 
-// 현재 노드, 처음 시작한 노드로부터 현재 노드까지의 거리
-void DFS(int nowNode, int nowDist)
+void dfs(int now, int cost)
 {
-    visited[nowNode] = true;
-    if (nowDist > maxDist)
+    visited[now] = true;
+    if (cost > maxCost)
     {
-        maxDist = nowDist;
-        keyNode = nowNode;
+        maxCost = cost;
+        start = now;
     }
-    for (int i = 0; i < tree[nowNode].size(); i++)
+    for (int i = 0; i < edge[now].size(); i++)
     {
-        int childNode = tree[nowNode][i].first;
-        int childDist = tree[nowNode][i].second;
-        // 리프 노드에 부모노드에 대한 정보가 있으므로 방문처리가 필요
-        if (!visited[childNode])
-        {
-            visited[childNode] = true;
-            DFS(childNode, nowDist + childDist);
-        }
+        int next = edge[now][i].first;
+        int nextCost = edge[now][i].second;
+        if (!visited[next])
+            dfs(next, cost + nextCost);
     }
 }
 
@@ -47,17 +42,16 @@ int main(void)
     cin.tie(0);
     cout.tie(0);
     cin >> N;
-    for (int i = 1; i < N; i++)
+    for (int i = 1, A, B, C; i < N; i++)
     {
-        cin >> P >> C >> W;
-        tree[P].push_back(make_pair(C, W));
-        tree[C].push_back(make_pair(P, W));
+        cin >> A >> B >> C;
+        edge[A].push_back({B, C});
+        edge[B].push_back({A, C});
     }
-    // 루트노드로부터 제일 멀리 떨어진 노드를 찾는다.
-    DFS(1, 0);
-    memset(visited, false, sizeof(visited));
-    // 제일 멀리 떨어진 노드를 시작으로 제일 멀리 덜어진 노드를 찾는다.
-    DFS(keyNode, 0);
-    cout << maxDist;
+    dfs(1, 0);
+    fill(visited, visited + 10001, false);
+    maxCost = 0;
+    dfs(start, 0);
+    cout << maxCost << "\n";
     return 0;
 }
