@@ -12,7 +12,7 @@
 #include <map>
 #include <set>
 using namespace std;
-#define MAX 2147483648;
+#define INF 2147483648
 typedef long long ll;
 
 ll N, M;
@@ -37,9 +37,7 @@ int main(void)
         v.push_back({B, A});
     }
     sort(v.begin(), v.end(), comp);
-    ll ans = MAX;
-    ll weight = 0;
-    ll price = -1;
+    ll ans = INF, weight = 0, price = -1;
     bool flag = false;
     for (int i = 0; i < v.size(); i++)
     {
@@ -49,14 +47,8 @@ int main(void)
         else
             price = v[i].first;
         if (weight >= M)
-        {
-            flag = true;
             ans = min(ans, price);
-        }
     }
-    if (!flag)
-        cout << -1 << "\n";
-    else
-        cout << ans << "\n";
+    (ans == INF) ? cout << -1 << "\n" : cout << ans << "\n";
     return 0;
 }
