@@ -12,27 +12,26 @@
 #include <map>
 #include <set>
 using namespace std;
+#define INF 2147483648
+typedef long long ll;
 
-int N, C;
-int dp[100001]; // 각 홍보 비용에 대한 고객의 수를 저장, 최대 비용: 1000 * 100
-vector<pair<int, int>> cost;
+int C, N;
+int dp[100001];
+vector<pair<int, int>> v;
 
 int solve(void)
 {
-    for (int price = 1; price <= 100000; price++)
+    for (int i = 1; i <= 100000; i++)
     {
-        for (int idx = 0; idx <= N; idx++)
+        for (auto j : v)
         {
-            // 도시의 홍보 비용 배수들을 초기화
-            if (!price % cost[idx].first)
-                dp[price] = max(dp[price], ((price / cost[idx].first) * cost[idx].second));
-            // 여러 도시가 동시에 홍보하는 경우
-            if (price - cost[idx].first >= 0)
-                dp[price] = max(dp[price], dp[price - cost[idx].first] + cost[idx].second);
+            if (!i % j.first)
+                dp[i] = max(dp[i], (i / j.first) * j.second);
+            if (i - j.first >= 0)
+                dp[i] = max(dp[i], dp[i - j.first] + j.second);
         }
-        // 처음으로 목표 고객을 만족하는 비용을 반환
-        if (dp[price] >= C)
-            return price;
+        if (dp[i] >= C)
+            return i;
     }
 }
 
@@ -45,8 +44,8 @@ int main(void)
     for (int i = 0, A, B; i < N; i++)
     {
         cin >> A >> B;
-        cost.push_back({A, B});
+        v.push_back({A, B});
     }
-    cout << solve();
+    cout << solve() << "\n";
     return 0;
 }
