@@ -1,0 +1,15 @@
+-- 코드를 입력하세요
+select
+    ai.name,
+    ain.count as count
+from animal_ins as ai
+left join(
+    select
+        name,
+        count(animal_id) as count
+    from animal_ins
+    group by name
+) as ain on ain.name = ai.name
+where ai.name is not null and count >= 2
+group by name
+order by name
