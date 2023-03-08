@@ -4,39 +4,42 @@
 #include <memory.h>
 #include <algorithm>
 #include <vector>
-#include <cmath>
 #include <stack>
 #include <queue>
-#include <deque>
-#include <time.h>
-#include <map>
-#include <set>
+#include <cmath>
+
 using namespace std;
+#define INF 2147483648
 typedef long long ll;
 
-int N, M, K, H = 1;
-ll A, B, C;
-vector<ll> tree, num;
+int N, M;
+vector<ll> tree;
+ll arr[1000001];
 
-void update(int idx, ll value)
+ll sum(ll idx)
 {
-    idx += H;
-    tree[idx] = value;
-    while (idx > 1)
+    ll sum = 0;
+    while (idx > 0)
     {
-        idx /= 2;
-        tree[idx] = tree[idx * 2] + tree[idx * 2 + 1];
+        sum += tree[idx];
+        idx -= (idx & -idx);
+    }
+    return sum;
+}
+
+void update(ll idx, ll value)
+{
+    while (idx < tree.size())
+    {
+        tree[idx] += value;
+        idx += (idx & -idx);
     }
 }
 
-ll query(int L, int R, int node, int nodeL, int nodeR) // 찾는 범위 왼쪽 값, 찾는 범위 오른쪽 값, 해당 노드 번호, 해당 노드의 왼쪽 범위, 해당 노드의 오른쪽 범위
+void makeTree()
 {
-    if (L <= nodeL && nodeR <= R)
-        return tree[node];
-    if (nodeR < L || R < nodeL)
-        return 0;
-    int mid = (nodeL + nodeR) / 2;
-    return query(L, R, node * 2, nodeL, mid) + query(L, R, node * 2 + 1, mid + 1, nodeR);
+    for (int i = 1; i <= N; i++)
+        update(i, arr[i]);
 }
 
 int main(void)
@@ -45,24 +48,17 @@ int main(void)
     cin.tie(0);
     cout.tie(0);
     cin >> N >> M;
-    // 단말 노드의 개수 구하기
-    while (N > H)
+    tree.resize(N + 1);
+    while (M--)
     {
-        H *= 2;
-    }
-    tree.resize(H * 2 + 1);
-    num.resize(N + 1);
-    for (int i = 0; i < M; i++)
-    {
+        ll A, B, C;
         cin >> A >> B >> C;
-        if (A == 1)
-            update(B - 1, C);
+        if (A == 0)
+            cout << sum(max(B, C)) - sum(min(B, C) - 1) << "\n";
         else
         {
-            if (B < C)
-                cout << query(B, C, 1, 1, H) << "\n";
-            else
-                cout << query(C, B, 1, 1, H) << "\n";
+            update(B, C - arr[B]);
+            arr[B] = C;
         }
     }
     return 0;
