@@ -4,14 +4,13 @@
 #include <memory.h>
 #include <algorithm>
 #include <vector>
-#include <cmath>
 #include <stack>
 #include <queue>
-#include <deque>
-#include <time.h>
-#include <map>
-#include <set>
+#include <cmath>
+
 using namespace std;
+#define INF 123456789
+typedef long long ll;
 
 int N;
 int arr[1000001];
