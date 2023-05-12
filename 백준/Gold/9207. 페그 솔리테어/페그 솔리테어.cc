@@ -86,8 +86,6 @@ void updateAnswer(int movingCnt)
         pinAns = cnt;
         movingAns = movingCnt;
     }
-    else if (cnt == pinAns)
-        movingAns = min(movingAns, movingCnt);
 }
 
 void dfs(int movingCnt)
