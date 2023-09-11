@@ -18,25 +18,12 @@ typedef long long ll;
 int N;
 ll arr[2][100001], minLimit[100001];
 
-void findMinLimit(void)
-{
-    ll tmp = INF;
-    minLimit[N - 1] = arr[0][N - 1];
-    for (int i = N - 1; i >= 1; i--)
-    {
-        tmp = min(tmp, arr[0][i]);
-        minLimit[i - 1] = tmp;
-    }
-}
-
 void solve(void)
 {
-    findMinLimit();
     ll cnt = 0, pSum = 0, maxNum = 0;
     for (int i = 0; i < N; i++)
     {
         maxNum = max(maxNum, arr[1][i]);
-        // 지금까지의 누적 합 <= 이후 상한값의 최소
         if (pSum <= arr[0][i])
             pSum += arr[1][i];
         else
