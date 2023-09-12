@@ -1,58 +1,47 @@
 #include <iostream>
+#include <string>
+#include <memory.h>
+#include <algorithm>
 #include <vector>
+#include <stack>
 #include <queue>
+#include <map>
+#include <set>
+#include <sstream>
+#include <cmath>
 using namespace std;
+#define INF 1e15
+#define MOD 1000000
+typedef long long ll;
 
-bool check[51];
+string from, to;
+bool visited[51];
 
-int main()
-{
-    ios_base::sync_with_stdio(0);
+void solve() {
+    int ans = 0, idx = to.length() - 1;
+    for (int i = from.length() - 1; i >= 0; i--) {
+        char f = from[i], t = to[idx];
+        if (f != t)
+            ans++;
+        else
+            idx--;
+    }
+    sort(from.begin(), from.end());
+    sort(to.begin(), to.end());
+    if (from != to)
+        ans = -1;
+    cout << ans << "\n";
+}
+
+void input() {
+    cin >> from >> to;
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
     cin.tie(0);
     cout.tie(0);
-
-    string a, b;
-    cin >> a >> b;
-
-    int idx = b.length() - 1;
-    for (int i = a.length() - 1; i >= 0; i--)
-    {
-        if (a[i] == b[idx])
-        {
-            check[i] = true;
-            idx--;
-        }
-    }
-
-    int ans = 0;
-
-    while (true)
-    {
-        bool find = false;
-        for (int i = a.length() - 1; i >= 0; i--)
-        {
-            if (check[i] == true)
-                continue;
-            if (a[i] == b[idx])
-            {
-                check[i] = true;
-                idx--;
-                ans++;
-                find = true;
-                break;
-            }
-        }
-
-        if (idx < 0)
-            break;
-
-        if (find == false)
-        {
-            cout << "-1";
-            return 0;
-        }
-    }
-
-    cout << ans;
+    input();
+    solve();
     return 0;
 }
