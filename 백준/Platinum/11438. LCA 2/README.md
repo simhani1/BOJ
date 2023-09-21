@@ -8,7 +8,7 @@
 
 ### 분류
 
-자료 구조(data_structures), 최소 공통 조상(lca), 희소 배열(sparse_table), 트리(trees)
+자료 구조, 최소 공통 조상, 희소 배열, 트리
 
 ### 문제 설명
 
