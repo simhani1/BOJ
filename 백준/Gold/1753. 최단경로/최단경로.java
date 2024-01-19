@@ -41,9 +41,15 @@ public class Main {
         dijkstra(K);
 
         // ans
+        StringBuilder sb = new StringBuilder();
         for (int i = 1; i <= V; i++) {
-            System.out.println((dist[i] == Integer.MAX_VALUE) ? "INF" : dist[i]);
+            if (dist[i] != Integer.MAX_VALUE) {
+                sb.append(dist[i]).append("\n");
+            } else {
+                sb.append("INF\n");
+            }
         }
+        System.out.println(sb.toString());
     }
 
     private static void dijkstra(int start) {
