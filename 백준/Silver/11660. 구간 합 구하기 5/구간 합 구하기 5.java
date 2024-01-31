@@ -2,6 +2,23 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
+/**
+ * @author
+ * 심종한
+ * @date
+ * 2024-01-31
+ * @link
+ * https://www.acmicpc.net/problem/11660
+ * @keyword_solution
+ * pSum[i][j] = (0,0) ~ (i,j)까지의 총합
+ * pSum[x2][y2] - pSum[x1 - 1][y2] - pSum[x2][y1 - 1] + pSum[x1 - 1][y1 - 1]
+ * @input
+ * @output
+ * @time_complex
+ * O(M)
+ * @perf
+ * 메모리: 121,928kb 시간: 852ms
+ */
 public class Main {
 
     private static BufferedReader br;
