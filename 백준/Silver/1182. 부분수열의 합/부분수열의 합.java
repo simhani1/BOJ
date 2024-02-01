@@ -41,7 +41,7 @@ public class Main {
             return;
         }
         solve(flag, cnt + 1);
-        flag = (1 << cnt) | flag;
+        flag |= (1 << cnt);
         solve(flag, cnt + 1);
     }
 }
