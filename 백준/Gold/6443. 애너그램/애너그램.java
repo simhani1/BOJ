@@ -1,42 +1,55 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.util.Arrays;
+import java.util.Scanner;
 
+/**
+ * @author 지종권
+ * @date 2024. 1. 30.
+ * @link https://www.acmicpc.net/problem/6443
+ * @keyword_solution
+ * @input
+ * @output
+ * @time_complex
+ * @perf
+ */
 public class Main {
+	static int[] alphabets;
+    static StringBuilder sb;
 
-    private static BufferedReader br;
-    private static StringTokenizer st;
-    private static StringBuilder sb = new StringBuilder();
-    private static int N, M;
-    private static int[] visited;
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Scanner sc = new Scanner(System.in);
+		int n = sc.nextInt();
 
-    public static void main(String[] args) throws Exception {
-        br = new BufferedReader(new InputStreamReader(System.in));
-        N = Integer.parseInt(br.readLine());
-        for (int i = 0; i < N; i++) {
-            String str = br.readLine();
-            M = str.length();
-            visited = new int[26];
-            // 알파벳 개수 저장
-            for (int j = 0; j < M; j++) {
-                visited[str.charAt(j) - 'a']++;
-            }
-            solve(str, "");
-        }
-        System.out.println(sb.toString());
-    }
+		for (int i = 0; i < n; i++) {
+			sb = new StringBuilder();
+			alphabets = new int[26];
+			String word = sc.next();
+			
+			for(int j = 0 ; j < word.length(); j++) {
+				alphabets[word.charAt(j) - 'a']++;
+			}
+			
+			req(word.length());
+		}
+	}
 
-    private static void solve(String str, String target) {
-        if (target.length() == M) {
-            sb.append(target).append("\n");
-            return;
-        }
-        for (int i = 0; i < 26; i++) {
-            if (visited[i] > 0) {
-                visited[i]--;
-                solve(str, target + (char) (i + 'a'));
-                visited[i]++;
-            }
-        }
-    }
+	static void req(int depth) {
+		// base
+		if(depth == sb.length()) {
+			System.out.println(sb.toString());
+			return;
+		}
+		
+		// inductive
+		for(int i = 0; i < 26; i++) {
+			if(alphabets[i] > 0) {
+				sb.append((char)(i + 'a'));
+				alphabets[i]--;
+				req(depth);
+				alphabets[i]++;
+				sb.setLength(sb.length() - 1);
+			}
+		}
+
+	}
 }
