@@ -19,6 +19,7 @@ public class Main {
         for (int i = 1; i <= N; i++) {
             arr[i] = Integer.parseInt(st.nextToken());
         }
+        /* 총합이 음수, 0, 양수 모두 가능하므로 음수로 초기화 */
         for (int i = 0; i <= N; i++) {
             fill(dp[i], -123456789);
         }
@@ -26,12 +27,15 @@ public class Main {
          /* 수를 제거하지 않는 경우 */
         for (int i = 1; i <= N; i++) {
             dp[i][0] = arr[i];
-            dp[i][0] = dp[i - 1][0] + arr[i] > dp[i][0] ? dp[i - 1][0] + arr[i] : arr[i];
+            if (dp[i - 1][0] + arr[i] > dp[i][0]) {
+                dp[i][0] = dp[i - 1][0] + arr[i];
+            }
         }
-        /* 수를 제거하는 경우 */
+        /* 이전 수를 제거한 경우 VS 제거하지 않은 경우 */
         for (int i = 2; i <= N; i++) {
-            dp[i][1] = Math.max(dp[i - 1][1], dp[i - 2][0]) + arr[i];
+            dp[i][1] = Math.max(dp[i - 2][0], dp[i - 1][1]) + arr[i];
         }
+        /* 정답 */
         for (int i = 1; i <= N; i++) {
             for (int j = 0; j < 2; j++) {
                 ans = Math.max(ans, dp[i][j]);
