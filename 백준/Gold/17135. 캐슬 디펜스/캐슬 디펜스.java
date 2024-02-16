@@ -61,7 +61,8 @@ public class Main {
             /* 공격 */
             List<Node> nodeList = new ArrayList<>();
             for (int i = 0; i < 3; i++) {
-                Node node = bfs(archer[i][0] - 1, archer[i][1], tmp);
+                boolean[][] visited = new boolean[N + 1][M + 1];
+                Node node = bfs(archer[i][0] - 1, archer[i][1], visited, tmp);
                 if (node != null) {
                     nodeList.add(node);
                 }
@@ -83,7 +84,7 @@ public class Main {
         return cnt;
     }
 
-    private static Node bfs(int startX, int startY, int[][] tmp) {
+    private static Node bfs(int startX, int startY, boolean[][] visited, int[][] tmp) {
         Queue<Node> q = new ArrayDeque<>();
         q.offer(new Node(startX, startY, 1));
         while (!q.isEmpty()) {
@@ -94,6 +95,10 @@ public class Main {
             if (dist > D) {
                 continue;
             }
+            if (visited[nowX][nowY]) {
+                continue;
+            }
+            visited[nowX][nowY] = true;
             if (tmp[nowX][nowY] == 1) {
                 return node;
             }
