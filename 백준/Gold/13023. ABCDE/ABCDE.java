@@ -11,14 +11,12 @@ public class Main {
     private static StringBuilder sb = new StringBuilder();
     private static int N, M, ans;
     private static List<Integer>[] arr;
-    private static boolean[] visited;
 
     public static void main(String[] args) throws Exception {
         st = new StringTokenizer(br.readLine());
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
         arr = new ArrayList[N + 1];
-        visited = new boolean[N + 1];
         for (int i = 0; i < N; i++) {
             arr[i] = new ArrayList<>();
         }
@@ -31,24 +29,22 @@ public class Main {
         }
         ans = 0;
         for (int i = 0; i < N; i++) {
-            if (ans == 0) {
-                dfs(i, 1);
-            }
+            dfs(i, 0, 1);
         }
         System.out.println(ans);
     }
 
-    private static void dfs(int now, int cnt) {
+    private static void dfs(int now, int bit, int cnt) {
         if (cnt == 5) {
-            ans = 1;
-            return;
+            System.out.println(1);
+            System.exit(0);
         }
-        visited[now] = true;
+        bit |= (1 << now);
         for (int next : arr[now]) {
-            if (!visited[next]) {
-                dfs(next, cnt + 1);
+            if ((bit & (1 << next)) == 0) {
+                dfs(next, bit, cnt + 1);
             }
         }
-        visited[now] = false;
+        bit &= ~(1 << now);
     }
 }
