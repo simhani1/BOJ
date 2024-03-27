@@ -78,9 +78,8 @@ public class Main {
                     q.offer(new Node(nextX, nextY, cost + 1, keys));
                 } else if ('a' <= arr[nextX][nextY] && arr[nextX][nextY] <= 'f') {
                     int keyToNum = arr[nextX][nextY] - 'a';
-                    int newKeys = keys | (1 << keyToNum);
-                    visited[nextX][nextY][newKeys] = true;
-                    q.offer(new Node(nextX, nextY, cost + 1, newKeys));
+                    visited[nextX][nextY][keys | (1 << keyToNum)] = true;
+                    q.offer(new Node(nextX, nextY, cost + 1, keys | (1 << keyToNum)));
                 } else if ('A' <= arr[nextX][nextY] && arr[nextX][nextY] <= 'F') {
                     int keyToNum = arr[nextX][nextY] - 'A';
                     if ((keys & (1 << keyToNum)) != 0) {
