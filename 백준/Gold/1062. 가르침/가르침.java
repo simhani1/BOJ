@@ -35,21 +35,7 @@ public class Main {
 
     private static void solve(int idx, int cnt, int bit) {
         if (cnt == K) {
-            int sum = 0;
-            for (int i = 0; i < N; i++) {
-                String str = arr[i];
-                boolean flag = true;
-                for (int j = 0; j < str.length(); j++) {
-                    if ((bit & 1 << (str.charAt(j) - 'a')) == 0) {
-                        flag = false;
-                        break;
-                    }
-                }
-                if (flag) {
-                    sum++;
-                }
-            }
-            ans = Math.max(ans, sum);
+            ans = Math.max(ans, counting(bit));
             return;
         }
         for (int i = idx; i < 26; i++) {
@@ -57,5 +43,23 @@ public class Main {
                 solve(i + 1, cnt + 1, bit | 1 << i);
             }
         }
+    }
+
+    private static int counting(int bit) {
+        int sum = 0;
+        for (int i = 0; i < N; i++) {
+            String str = arr[i];
+            boolean flag = true;
+            for (int j = 0; j < str.length(); j++) {
+                if ((bit & 1 << (str.charAt(j) - 'a')) == 0) {
+                    flag = false;
+                    break;
+                }
+            }
+            if (flag) {
+                sum++;
+            }
+        }
+        return sum;
     }
 }
