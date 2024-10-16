@@ -1,76 +1,18 @@
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
-
 
 public class Main {
 
     private static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    private static StringTokenizer st;
     private static StringBuilder sb = new StringBuilder();
+    private static StringTokenizer st;
     private static int N;
+    private static int[][] arr;
     private static int[] parent;
-    private static PriorityQueue<Edge> pq = new PriorityQueue<>((e1, e2) -> Integer.compare(e1.cost, e2.cost));
-
-    public static void main(String[] args) throws Exception {
-        st = new StringTokenizer(br.readLine());
-        N = Integer.parseInt(st.nextToken());
-        parent = new int[N + 1];
-        for (int i = 0; i <= N; i++) {
-            parent[i] = i;
-        }
-        int sum = 0;
-        for (int i = 0; i < N; i++) {
-            char[] arr = br.readLine().toCharArray();
-            for (int j = 0; j < N; j++) {
-                if (arr[j] == '0') {
-                    continue;
-                }
-                int cost = 0;
-                if (arr[j] >= 'a') {
-                    cost = arr[j] - 'a' + 1;
-                } else if(arr[j] >= 'A') {
-                    cost = arr[j] - 'A' + 27;
-                }
-                pq.add(new Edge(i, j, cost));
-                sum += cost;
-            }
-        }
-        while (!pq.isEmpty()) {
-            Edge edge = pq.poll();
-            int from = edge.from;
-            int to = edge.to;
-            int cost = edge.cost;
-            if (Find(from) != Find(to)) {
-                Union(from, to);
-                sum -= cost;
-            }
-        }
-        for (int i = 0; i < N; i++) {
-            if (Find(i) != 0) {
-                sum = -1;
-            }
-        }
-        System.out.println(sum);
-    }
-
-    private static void Union(int a, int b) {
-        a = Find(a);
-        b = Find(b);
-        if (a != b) {
-            parent[Math.max(a, b)] = Math.min(a, b);
-        }
-    }
-
-    private static int Find(int num) {
-        if (parent[num] == num) {
-            return num;
-        }
-        return parent[num] = Find(parent[num]);
-    }
+    private static PriorityQueue<Edge> pq = new PriorityQueue<>((o1, o2) -> Integer.compare(o1.cost, o2.cost));
 
     static class Edge {
         int from;
@@ -82,5 +24,61 @@ public class Main {
             this.to = to;
             this.cost = cost;
         }
+    }
+
+    public static void main(String[] args) throws IOException {
+        N = Integer.parseInt(br.readLine());
+        arr = new int[N + 1][N + 1];
+        parent = new int[N + 1];
+        for (int i = 0; i < N; i++) {
+            parent[i] = i;
+        }
+        int sum = 0;
+        for (int i = 0; i < N; i++) {
+            String line = br.readLine();
+            int cost = 0;
+            for (int j = 0; j < N; j++) {
+                char c = line.charAt(j);
+                if (c == '0') {
+                    cost = 0;
+                } else if ('a' <= c && c <= 'z') {
+                    cost = c - 'a' + 1;
+                } else if ('A' <= c && c <= 'Z') {
+                    cost = c - 'A' + 27;
+                }
+                if (i != j && cost != 0) {
+                    pq.offer(new Edge(i, j, cost));
+                }
+                sum += cost;
+            }
+        }
+        int cnt = 0;
+        while (!pq.isEmpty()) {
+            Edge edge = pq.poll();
+            int from = edge.from;
+            int to = edge.to;
+            int cost = edge.cost;
+            if (Find(from) != Find(to)) {
+                Union(from, to);
+                sum -= cost;
+                cnt++;
+            }
+        }
+        System.out.println(cnt == N - 1 ? sum : -1);
+    }
+
+    private static void Union(int a, int b) {
+        a = Find(a);
+        b = Find(b);
+        if (a != b) {
+            parent[Math.max(a, b)] = Math.min(a, b);
+        }
+    }
+
+    private static int Find(int a) {
+        if (a == parent[a]) {
+            return a;
+        }
+        return parent[a] = Find(parent[a]);
     }
 }
