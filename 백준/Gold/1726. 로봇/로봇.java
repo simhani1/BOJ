@@ -15,6 +15,8 @@ public class Main {
     private static boolean[][][] visited;
     private static int[] dx = {0, 0, 1, -1};
     private static int[] dy = {1, -1, 0, 0};
+    private static int[] leftTurn = {3, 2, 0, 1};
+    private static int[] rightTurn = {2, 3, 1, 0};
 
     static class Pos {
         int x;
@@ -119,26 +121,6 @@ public class Main {
     }
 
     private static int changeDir(int dir, boolean left) {
-        if (left) {
-            if (dir == 0) {
-                return 3;
-            } else if (dir == 1) {
-                return 2;
-            } else if (dir == 2) {
-                return 0;
-            } else {
-                return 1;
-            }
-        } else {
-            if (dir == 0) {
-                return 2;
-            } else if (dir == 1) {
-                return 3;
-            } else if (dir == 2) {
-                return 1;
-            } else {
-                return 0;
-            }
-        }
+        return left ? leftTurn[dir] : rightTurn[dir];
     }
 }
