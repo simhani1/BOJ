@@ -11,9 +11,9 @@ public class Main {
     private static StringBuilder sb = new StringBuilder();
     private static int T, F;
     private static Map<String, Integer> map = new HashMap<>();
-    private static int[] parent;
-    private static int[] friends;
     private static final int INF = 200001;
+    private static int[] parent = new int[INF];
+    private static int[] friends = new int[INF];
 
     public static void main(String[] args) throws Exception {
         T = Integer.parseInt(br.readLine());
@@ -29,10 +29,9 @@ public class Main {
                 map.put(b, map.getOrDefault(b, idx++));
                 union(map.get(a), map.get(b));
                 sb.append(friends[
-                    Math.min(
-                        find(map.get(a)),
-                        find(map.get(b))
-                    )]).append("\n");
+                    Math.min(parent[map.get(a)], parent[map.get(b)])
+                    ]
+                ).append("\n");
             }
         }
         System.out.println(sb);
@@ -40,8 +39,6 @@ public class Main {
 
     private static void init() {
         map.clear();
-        parent = new int[INF];
-        friends = new int[INF];
         for (int i = 0; i < INF; i++) {
             parent[i] = i;
             friends[i] = 1;
