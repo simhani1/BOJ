@@ -1,4 +1,4 @@
-# [Bronze IV] 자동완성 - 24883 
+# [Bronze V] 자동완성 - 24883 
 
 [문제 링크](https://www.acmicpc.net/problem/24883) 
 
@@ -8,7 +8,11 @@
 
 ### 분류
 
-구현(implementation)
+구현
+
+### 제출 일자
+
+2022년 8월 20일 04:32:29
 
 ### 문제 설명
 
