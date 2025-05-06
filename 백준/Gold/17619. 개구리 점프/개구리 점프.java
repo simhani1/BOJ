@@ -62,7 +62,7 @@ public class Main {
             int num = arr[i].num;
             if (prevL <= nowL && nowL <= prevR) {
                 parent[num] = find(arr[i - 1].num);
-                prevR = nowR;
+                prevR = Math.max(prevR, nowR);
             } else {
                 prevL = nowL;
                 prevR = nowR;
