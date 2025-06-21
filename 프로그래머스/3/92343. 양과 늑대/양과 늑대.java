@@ -4,7 +4,7 @@ class Solution {
 
     int answer = 0;
     List<Integer>[] arr;
-    int[] type;
+    int[] info;
     boolean[][][] visited;
     
     public int solution(int[] info, int[][] edges) {
@@ -16,29 +16,30 @@ class Solution {
             arr[edges[i][0]].add(edges[i][1]);
             arr[edges[i][1]].add(edges[i][0]);
         }
-        type = info;
+        this.info = info;
         visited = new boolean[info.length][info.length + 1][info.length + 1];
         dfs(0, 0, 0);
         return answer;
     }
     
     private void dfs(int now, int sheep, int wolf){
-        if(type[now] == 0)
-            sheep++;
-        else if(type[now] == 1)
-            wolf++;
+        if(info[now] == 0) {
+            sheep++;   
+        } else if(info[now] == 1) {
+            wolf++;   
+        }
         answer = Math.max(answer, sheep);
         if(sheep <= wolf)
             return;
-        for(int i=0;i<arr[now].size();i++){
+        for(int i = 0; i < arr[now].size(); i++) {
             int next = arr[now].get(i);
-            int tmp = type[now];
+            int tmp = info[now];
             if(!visited[next][sheep][wolf]){
                 visited[next][sheep][wolf] = true;
-                type[now] = 2;
+                info[now] = -1;
                 dfs(next, sheep, wolf);
                 visited[next][sheep][wolf] = false;
-                type[now] = tmp;
+                info[now] = tmp;
             }
         }
     }
