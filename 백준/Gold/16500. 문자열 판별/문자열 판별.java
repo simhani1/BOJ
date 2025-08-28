@@ -27,9 +27,6 @@ public class Main {
 	}
 
 	private static void dfs(int idx) {
-		if (idx > str.length()) {
-			return;
-		}
 		if (idx == str.length()) {
 			flag = true;
 			return;
