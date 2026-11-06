@@ -1,86 +1,97 @@
-import java.util.*;
+import java.util.*; 
 
-/*
-양방향
-등산로별 시간 소요
-쉼터 또는 산봉우리를 방문 -> 휴식 가능, 휴식 없이 디옹해야 하는 시간 중 가장 긴 시간 === intensity
-산봉우리 중 한 곳만 방문한 뒤 돌아오기 -> 즉 출입구, 산봉우리는 하나만 방문 가능
-이 규칙을 지키며 intensity가 최소가 되는 코스를 찾기
-*/
-
-class Node {
-    int idx;
-    int intensity;
-    
-    public Node(int idx, int intensity){
-        this.idx = idx;
-        this.intensity = intensity;
+class Edge {
+    int now, cost;
+    public Edge(int now, int cost) {
+        this.now = now;
+        this.cost = cost;
     }
 }
 
 class Solution {
-    
+    int N;
+    int [][] paths;
+    int[] gates, summits;
+    List<Edge>[] edges;
+    Set<Integer> gateSet, summitSet;
     public int[] solution(int n, int[][] paths, int[] gates, int[] summits) {
-        // 정점까지의 최소 intensity 저장
-        int[] intensity = new int[n + 1];
+        this.N = n;
+        this.paths = paths;
+        this.gates = gates;
+        this.summits = summits;
+        
+        gateSet = new HashSet<>();
+        for (int gate : gates) {
+            gateSet.add(gate); 
+        }
+        summitSet = new HashSet<>();
+        for (int summit : summits) {
+            summitSet.add(summit);
+        }
+        
+        edges = new ArrayList[N + 1];
+        for (int i = 0; i <= N; i++) {
+            edges[i] = new ArrayList<>();
+        }
+        
+        for (int i = 0; i < paths.length; i++) {
+            edges[paths[i][0]].add(new Edge(paths[i][1], paths[i][2]));
+            edges[paths[i][1]].add(new Edge(paths[i][0], paths[i][2]));
+        }
+        
+        int[] intensity = dijkstra(gates);
+
+               
+        int[] answer = {-1, Integer.MAX_VALUE};
+        Arrays.sort(summits);
+        for (int summit : summits) {
+            if (intensity[summit] < answer[1]) {
+                answer[0] = summit;
+                answer[1] = intensity[summit];
+            }
+        }
+        return answer;
+    }
+
+    int[] dijkstra(int[] gates) {
+        int[] intensity = new int[N + 1];
         Arrays.fill(intensity, Integer.MAX_VALUE);
         
-        // 도착지 체크
-        boolean[] isSummit = new boolean[n + 1];
-        for(int summit : summits){
-            isSummit[summit] = true;
+        Queue<Edge> pq = new PriorityQueue<>((a, b) -> Integer.compare(a.cost, b.cost));
+        for (int gate : gates) {
+            intensity[gate] = 0;
+            pq.offer(new Edge(gate, 0));
         }
         
-        // 그래프 생성
-        List<List<Node>> arr = new ArrayList<>();
-        for(int i=0;i<=n;i++){
-            arr.add(new ArrayList<>());
-        }
-        for(int[] p : paths){
-            int from = p[0];
-            int to = p[1];
-            int cost = p[2];    
-            arr.get(from).add(new Node(to, cost));
-            arr.get(to).add(new Node(from, cost));
-        }
-    
-        // 다익스트라
-        Queue<Node> q = new LinkedList<>();
-        for(int gate : gates){
-            q.add(new Node(gate, 0));
-            intensity[gate] = 0;
-        }
-        while(!q.isEmpty()){
-            Node now = q.poll();   
-            // 현재 경로로 온 경우의 intensity > 다른 경로로 온 경우의 intensity
-            if(now.intensity > intensity[now.idx])
+        while (!pq.isEmpty()) {
+            Edge curr = pq.poll();
+            int now = curr.now;
+            int nowCost = curr.cost; 
+            
+            if (intensity[now] < nowCost) {
                 continue;
-            for(Node next : arr.get(now.idx)){
-                // max(지금까지의 intensity중 최댓값, 다음 정점까지의 intensity)
-                int maxIntensity = Math.max(now.intensity, next.intensity);
-                // 다른 경로로 다음 정점까지 간 경우의 intensity > 현재 경로로 다음 정점까지 간 경우의 intensity
-                if(intensity[next.idx] > maxIntensity){
-                    intensity[next.idx] = maxIntensity;
-                    // 산봉우리인 경우 stop
-                    if(isSummit[next.idx])
-                        continue;
-                    q.add(new Node(next.idx, maxIntensity));
+            }
+            
+            if (summitSet.contains(now)) {
+                continue;
+            }
+            
+            for (Edge edge : edges[now]) {
+                int next = edge.now;
+                
+                if (gateSet.contains(next)) {
+                    continue;
+                }
+                
+                int nextIntensity = Math.max(nowCost, edge.cost);
+                
+                if (nextIntensity < intensity[next]) {
+                    intensity[next] = nextIntensity;
+                    pq.offer(new Edge(next, nextIntensity));
                 }
             }
         }
-        int ansIdx = Integer.MAX_VALUE;
-        int ansIntensity = Integer.MAX_VALUE;
-        for(int summit : summits){
-            if(intensity[summit] < ansIntensity){
-                ansIdx = summit;  
-                ansIntensity = intensity[summit];
-            }
-            else if(intensity[summit] == ansIntensity && summit < ansIdx){
-                ansIdx = summit;   
-                ansIntensity = intensity[summit];
-            }
-        }
-        int[] answer = {ansIdx, ansIntensity};
-        return answer;
+        
+        return intensity;
     }
 }
