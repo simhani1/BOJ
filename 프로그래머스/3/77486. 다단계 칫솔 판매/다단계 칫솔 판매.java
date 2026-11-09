@@ -4,26 +4,18 @@ class Solution {
     
     public int[] solution(String[] enroll, String[] referral, String[] seller, int[] amount) {
         Map<String, Integer> db = new HashMap<>();        
-        int pk = 0;
-        db.put("center", pk);
+        db.put("center", 0);
         for (int i = 0; i < enroll.length; i++) {
-            db.put(enroll[i], ++pk);
+            db.put(enroll[i], i + 1);
         }
         
-        int[] profit = new int[pk + 1];
-        
-        int[] parent = new int[pk + 1];
-        for (int i = 0; i <= pk; i++) {
-            parent[i] = i;
-        }
+        int[] profit = new int[enroll.length + 1];
+
+        int[] parent = new int[enroll.length + 1];
 
         for (int i = 0; i < enroll.length; i++) {
-            String a = enroll[i];
-            String b = referral[i];
-            if ("-".equals(b)) {
-                parent[db.get(a)] = 0;
-            } else {
-                parent[db.get(a)] = db.get(b);
+            if (!"-".equals(referral[i])) {
+                parent[i + 1] = db.get(referral[i]);
             }
         }
         
@@ -42,7 +34,7 @@ class Solution {
         
         int[] answer = new int[enroll.length];
         for (int i = 0; i < enroll.length; i++) {
-            answer[i] = profit[db.get(enroll[i])];
+            answer[i] = profit[i + 1];
         }
         return answer;
     }
